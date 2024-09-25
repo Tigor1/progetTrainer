@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/20240611/01_create_users.sql
+  - include:
+      file: db/changelog/20240611/02_insert_user.sql
+  - include:
+      file: db/changelog/20240611/03_create_task.sql
+  - include:
+      file: db/changelog/20240611/insert_task.sql

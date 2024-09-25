@@ -1,0 +1,16 @@
+<configuration>
+    <!-- Logstash appender configuration -->
+    <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <!-- Logstash container hostname and port -->
+        <destination>${LOGSTASH_HOST}:${LOGSTASH_PORT}</destination>
+        <!-- Logstash encoder for JSON format -->
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"application":"my-spring-boot-app", "environment":"${ENVIRONMENT:development}"}</customFields>
+        </encoder>
+    </appender>
+
+    <!-- Root logger configuration -->
+    <root level="INFO">
+        <appender-ref ref="logstash"/>
+    </root>
+</configuration>
