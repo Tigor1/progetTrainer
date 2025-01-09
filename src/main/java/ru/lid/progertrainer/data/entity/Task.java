@@ -26,10 +26,10 @@ import lombok.experimental.SuperBuilder;
 )
 public class Task extends BaseEntityWithDateTime {
 
-    private String tittle;
+    private String title;
 
     @Enumerated(EnumType.STRING)
-    private TaskDifficultyLevel taskDifficultyLevel;
+    private Difficulty difficulty;
 
     private String descriptionOfTask;
 

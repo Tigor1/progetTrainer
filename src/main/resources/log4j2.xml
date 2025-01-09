@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="10">
+    <Properties>
+        <Property name="appName">batm-zod</Property>
+        <Property name="appType">JAVA</Property>
+        <!-- При необходимости эти поля могут быть изменены -->
+        <Property name="encProvider"/>
+        <Property name="risCode">2213</Property>
+        <Property name="projectCode">BATM</Property>
+    </Properties>
+    <Appenders>
+        <Socket name="Socket" host="127.0.0.1" port="5170"
+                reconnectionDelayMillis="5000">
+            <JsonTemplateLayout>
+                <EventTemplate>
+                    {
+                    "appName": "${appName}",
+                    "risCode": "${risCode}",
+                    "projectCode": "${projectCode}",
+                    "localTime": {
+                    "$resolver": "timestamp",
+                    "pattern": {
+                    "format": "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+                    "timeZone": "UTC"
+                    }
+                    },
+                    "level": {
+                    "$resolver": "level",
+                    "field": "name"
+                    },
+                    "text": {
+                    "$resolver": "message",
+                    "stringified": true
+                    },
+                    "eventId": "${vtbEventId:uuid}",
+                    "extEventId": {
+                    "$resolver": "mdc",
+                    "key": "extEventId"
+                    },
+                    "batm.applicationId": {
+                    "$resolver": "mdc",
+                    "key": "applicationId"
+                    },
+                    "batm.clientId": {
+                    "$resolver": "mdc",
+                    "key": "clientId"
+                    },
+                    "batm.controller": {
+                    "$resolver": "mdc",
+                    "key": "controller"
+                    },
+                    "batm.action": {
+                    "$resolver": "mdc",
+                    "key": "action"
+                    },
+                    "parentId": null,
+                    "encProvider": "${encProvider}",
+                    "agrType": "${jaegerSpan:agrType}",
+                    "traceId": "${jaegerSpan:traceId}",
+                    "spanId": "${jaegerSpan:spanId}",
+                    "parentSpanId": {
+                    "$resolver": "mdc",
+                    "key": "parentSpanId"
+                    },
+                    "userId": {
+                    "$resolver": "mdc",
+                    "key": "userId"
+                    },
+                    "requestId": {
+                    "$resolver": "mdc",
+                    "key": "requestId"
+                    },
+                    "logicTime": {
+                    "$resolver": "mdc",
+                    "key": "logicTime"
+                    },
+                    "appType": "${appType}",
+                    <!-- Значение вычитывается из MDC для возможности кастомизации поля stack в приложении-->
+                    <!-- "stack": "${json:exception:stackTrace:text}", -->
+                    "stack": {
+                    "$resolver": "exception",
+                    "field": "stackTrace",
+                    "stackTrace": {
+                    "stringified": true
+                    }
+                    },
+                    "levelInt": {
+                    "$resolver": "level",
+                    "field": "severity",
+                    "severity": {
+                    "field": "code"
+                    }
+                    },
+                    "loggerName": {
+                    "$resolver": "logger",
+                    "field": "name"
+                    },
+                    "threadName": {
+                    "$resolver": "thread",
+                    "field": "name"
+                    },
+                    "callerClass": {
+                    "$resolver": "source",
+                    "field": "className"
+                    },
+                    "callerMethod": {
+                    "$resolver": "source",
+                    "field": "methodName"
+                    },
+                    "callerLine": {
+                    "$resolver": "source",
+                    "field": "lineNumber"
+                    },
+                    "mdc": {
+                    "$resolver": "mdc"
+                    },
+                    "esIndexLevelSuffix": "${esIndexLevelSuffix:level}"
+                    }
+                </EventTemplate>
+            </JsonTemplateLayout>
+        </Socket>
+
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} %highlight{${LOG_LEVEL_PATTERN:-%5p}}{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=green, DEBUG=green bold, TRACE=blue} %X %style{}{magenta} [%M] %style{%40C}{cyan} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%xEx}" />
+            <!--PatternLayout pattern="%d{yyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/-->
+        </Console>
+
+        <!-- Should be removed later?! -->
+        <RollingFile name="RollingFile"
+                     fileName="logs/batm-zod.log"
+                     filePattern="logs/$${date:yyyy-MM}/batm-zod.log-%d{-dd-MMMM-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <pattern>%d %p %X %C{1.} [%t] %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <!-- rollover on startup, daily and when the file reaches
+                    10 MegaBytes -->
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy
+                        size="10 MB" />
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+<!--            <AppenderRef ref="Socket"/>-->
+            <AppenderRef ref="Console"/>
+<!--            <AppenderRef ref="RollingFile"/>-->
+        </Root>
+
+        <!-- trace < debug < info < warn < error < fatal -->
+        <Logger name="ru.vtb.omni.audit" level="info"/>
+        <Logger name="ru.vtb.batm.zod" level="info"/>
+        <Logger name="org.springframework" level="info"/>
+        <Logger name="org.springframework.web" level="info"/>
+        <Logger name="org.springframework.web.client.RestTemplate" level="info"/>
+        <Logger name="org.springframework.web.filter.CommonsRequestLoggingFilter" level="debug"/>
+        <Logger name="org.springframework.ws" level="info"/>
+        <Logger name="org.springframework.cache" level="debug"/>
+        <Logger name="org.springframework.batch" level="error"/>
+        <Logger name="org.hibernate" level="info"/>
+        <Logger name="reactor.netty.http.client" level="info"/>
+        <Logger name="org.springframework.transaction.interceptor" level="error"/>
+        <Logger name="io.jaegertracing" level="error"/>
+        <Logger name="org.zalando.logbook" level="trace"/>
+    </Loggers>
+</Configuration>

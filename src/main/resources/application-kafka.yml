@@ -1,0 +1,21 @@
+spring:
+  kafka:
+    enabled: true
+
+kafka:
+  proger-trainer:
+    enabled: false
+    bootstrap-servers: localhost:8080
+    consumer-group-id: proger-trainer
+    ssl:
+      enabled: false
+      key-password: ketpass
+      truststore:
+        type: PKCS12
+        location: PKCS12
+        password: PKCS12
+      keystore:
+        type: PKCS12
+        location: PKCS12
+        password: PKCS12
+    proger-trainer-in-topic: proger-trainer-in-topic

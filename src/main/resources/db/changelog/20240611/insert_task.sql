@@ -1,4 +1,4 @@
-INSERT INTO proger_trainer.task(tittle, task_difficulty_level, description_of_task, solution, number_of_solutions, user_id, create_datetime, update_datetime)
+INSERT INTO proger_trainer.task(title, difficulty, description_of_task, solution, number_of_solutions, user_id, create_datetime, update_datetime)
 VALUES('tittle_1', 'EASY', 'description_of_task_1', 'solution_1', 3, 1, now()::timestamp, now()::timestamp),
       ('tittle_2', 'MEDIUM', 'description_of_task_2', 'solution_2', 6, 2, now()::timestamp, now()::timestamp),
       ('tittle_3', 'HARD', 'description_of_task_3', 'solution_3', 0, 1, now()::timestamp, now()::timestamp),

@@ -3,7 +3,7 @@ package ru.lid.progertrainer.dto.request.task;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
-import ru.lid.progertrainer.data.entity.TaskDifficultyLevel;
+import ru.lid.progertrainer.data.entity.Difficulty;
 import ru.lid.progertrainer.data.exeption.EnumValidator;
 
 @Data
@@ -15,8 +15,8 @@ public class NewTaskRequestDto {
 
     @Schema(description = "Уровень сложности")
     @NotEmpty(message = "taskDifficultyLevel is mandatory")
-    @EnumValidator(enumClass = TaskDifficultyLevel.class)
-    private String taskDifficultyLevel;
+    @EnumValidator(enumClass = Difficulty.class)
+    private String difficulty;
 
     @Schema(description = "Описание таски")
     @NotEmpty(message = "descriptionOfTask is mandatory")

@@ -13,15 +13,9 @@ spring:
     default-schema: proger_trainer
   jpa:
     show-sql: true
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,prometheus
-  endpoint:
-    prometheus:
-      enabled: true
+    properties:
+      hibernate:
+        format_sql: true
 
 db:
   schema: proger_trainer

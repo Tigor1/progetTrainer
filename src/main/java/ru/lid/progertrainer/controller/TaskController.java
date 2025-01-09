@@ -1,19 +1,23 @@
 package ru.lid.progertrainer.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.lid.progertrainer.data.exeption.ErrorDetails;
 import ru.lid.progertrainer.dto.request.task.NewTaskRequestDto;
-import ru.lid.progertrainer.dto.response.task.TasksReponseDto;
+import ru.lid.progertrainer.dto.request.task.TaskRequestDto;
+import ru.lid.progertrainer.dto.response.task.TaskResponseDto;
 import ru.lid.progertrainer.service.TaskService;
-
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/v1/tasks")
@@ -22,16 +26,18 @@ import java.util.Objects;
 public class TaskController {
     private final TaskService taskService;
 
-    @GetMapping
-    @Operation(description = "получить все таски постранично")
-    public TasksReponseDto getTasks(@RequestParam(required = false) int page, @RequestParam(required = false) String search) {
-        if (Objects.isNull(search)) {
-            return taskService.getTaskByPage(page);
-        }
-        return taskService.getTaskByTitle(search, page);
+    @PostMapping
+    @Operation(description = "получить все задачи постранично с фильтром и сортипровкой")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "получить все задачи постранично с фильтром и сортипровкой"),
+            @ApiResponse(responseCode = "400", description = "Неправильный формат запроса к сервису", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorDetails.class))),
+            @ApiResponse(responseCode = "500", description = "сервер выполнил некорректную операцию/произошла непредвиденная ошибка", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorDetails.class))),
+    })
+    public Page<TaskResponseDto> getTasks(@RequestBody TaskRequestDto taskRequestDto) {
+        return taskService.getTask(taskRequestDto);
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public String addTask(@RequestBody NewTaskRequestDto newTaskRequestDto) {
         taskService.addNewTask(newTaskRequestDto);
         return "OK";
