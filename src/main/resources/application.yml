@@ -6,4 +6,5 @@ spring:
     import: application-db.yml, 
             application-kafka.yml, 
             application-logging.yml,
-            application-monitoring.yml
+            application-monitoring.yml,
+            application-security.yml

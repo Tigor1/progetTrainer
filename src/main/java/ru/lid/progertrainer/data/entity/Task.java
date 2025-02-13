@@ -13,6 +13,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import ru.lid.progertrainer.security.data.entity.User;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity

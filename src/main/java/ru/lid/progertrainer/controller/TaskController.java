@@ -42,4 +42,5 @@ public class TaskController {
         taskService.addNewTask(newTaskRequestDto);
         return "OK";
     }
+
 }

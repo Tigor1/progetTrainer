@@ -2,14 +2,14 @@ spring:
   application:
     name: progerTrainer
   datasource:
-    username: ${POSTGRES_USERNAME}
-    password: ${POSTGRES_PASSWORD}
-    url: ${POSTGRES_URL}
+    username: ${POSTGRES_USERNAME:postgrtes}
+    password: ${POSTGRES_PASSWORD:postgrtes}
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/proger_trainer}
     driver-class-name: org.postgresql.Driver
   liquibase:
-    url: ${POSTGRES_URL}
-    user: ${POSTGRES_USERNAME}
-    password: ${POSTGRES_PASSWORD}
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/proger_trainer}
+    user: ${POSTGRES_USERNAME:postgrtes}
+    password: ${POSTGRES_PASSWORD:postgrtes}
     default-schema: proger_trainer
   jpa:
     show-sql: true

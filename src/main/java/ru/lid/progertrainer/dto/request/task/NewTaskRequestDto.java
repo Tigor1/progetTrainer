@@ -2,11 +2,13 @@ package ru.lid.progertrainer.dto.request.task;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.Builder;
 import lombok.Data;
 import ru.lid.progertrainer.data.entity.Difficulty;
 import ru.lid.progertrainer.data.exeption.EnumValidator;
 
 @Data
+@Builder
 @Schema(name = "Новая таска")
 public class NewTaskRequestDto {
     @Schema(description = "Заголовок такси")

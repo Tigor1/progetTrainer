@@ -21,6 +21,7 @@ public interface TaskMapper {
     @Mapping(target = "updateDateTime", expression = "java(java.time.OffsetDateTime.now())")
     @Mapping(target = "difficulty", source = "difficulty", qualifiedByName = "StringTotaskDifficultyLevel")
     @Mapping(target = "solution", constant = "default_solution")
+    @Mapping(target = "title", source = "tittle")
     @Mapping(target = "numberOfSolutions", constant = "0L")
     Task newTaskDtoToTask(NewTaskRequestDto newTaskRequestDto);
 

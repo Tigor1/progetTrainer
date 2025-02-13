@@ -1,0 +1,25 @@
+s3:
+  enabled: false
+  signature-type: ${S3_SIGNATURE_TYPE:AWSS3V4SignerType}
+  identity-keystore-file: ${S3_IDENTIRY_KEYSTORE_FILE:}
+  identity-keystore-type: ${S3_IDENTIRY_KEYSTORE_TYPE:pkcs12}
+  identity-keystore-password: ${S3_IDENTIRY_KEYSTORE_TYPE:pkcs12}
+  trust-keystore-file: ${S3_TRUST_KEYSTORE_FILE:}
+  trust-keystore-type: ${S3_TRUST_KEYSTORE_TYPE:pkcs12}
+  trust-keystore-password: ${S3_TRUST_KEYSTORE_TYPE:pkcs12}
+  concrete-s3:
+    endpoint: ${S3_ENDPOINT:http://localhost:9000}
+    access-key: ${S3_ACCESS_KEY:minioadmin}
+    secrete-key: ${S3_SECRETE_KEY:minioadmin}
+    bucket-delimiter: ${S3_BUCKET_DELIMITER:/}
+    bucket-in:
+    bucket-in-dir:
+    bucket-out:
+    bucket-out-dir:
+    bucket-archived-dir:
+    bucket-error-dir:
+    bucket-clean-ttl:
+    bucket-clean-delay:
+    region: ${S3_REGION:us-east-1}
+    buffer-size: ${:5242880}
+    cert-check: ${S3_DISABLE_CERT_CHECK:true}

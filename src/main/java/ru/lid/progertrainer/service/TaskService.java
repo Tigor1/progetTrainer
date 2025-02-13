@@ -40,8 +40,8 @@ public class TaskService {
         }
     }
 
-    public void addNewTask(NewTaskRequestDto newTaskRequestDto) {
+    public Task addNewTask(NewTaskRequestDto newTaskRequestDto) {
         Task task = taskMapper.newTaskDtoToTask(newTaskRequestDto);
-        taskRepository.save(task);
+        return taskRepository.save(task);
     }
 }
