@@ -1,8 +1,10 @@
 package ru.lid.progertrainer.security;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,10 +31,30 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(
-            @RequestBody AuthenticationRequest request
+    public ResponseEntity<String> authenticate(
+            @RequestBody AuthenticationRequest request,
+            HttpServletResponse response
     ) {
-        return ResponseEntity.ok(service.authenticate(request));
+        AuthenticationResponse authenticate = service.authenticate(request);
+
+        // Устанавливаем Access Token в HttpOnly Cookie
+        Cookie accessCookie = new Cookie("ACCESS_TOKEN", authenticate.getAccessToken());
+        accessCookie.setHttpOnly(true);
+//        accessCookie.setSecure(true);
+        accessCookie.setPath("/");
+        accessCookie.setMaxAge(15 * 60); // 15 минут
+
+        // Устанавливаем Refresh Token в HttpOnly Cookie
+        Cookie refreshCookie = new Cookie("REFRESH_TOKEN", authenticate.getRefreshToken());
+        refreshCookie.setHttpOnly(true);
+//        refreshCookie.setSecure(true);
+        refreshCookie.setPath("/");
+        refreshCookie.setMaxAge(7 * 24 * 60 * 60); // 7 дней
+
+        response.addCookie(accessCookie);
+        response.addCookie(refreshCookie);
+
+        return ResponseEntity.ok(HttpStatus.OK.toString());
     }
 
     @PostMapping("/refresh-token")
