@@ -7,4 +7,5 @@ spring:
             application-kafka.yml, 
             application-logging.yml,
             application-monitoring.yml,
-            application-security.yml
+            application-security.yml,
+            application-ssl.yml
