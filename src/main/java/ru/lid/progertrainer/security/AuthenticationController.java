@@ -64,4 +64,30 @@ public class AuthenticationController {
     ) throws IOException {
         service.refreshToken(request, response);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) {
+        Cookie accessCookie = new Cookie("ACCESS_TOKEN", null);
+        accessCookie.setHttpOnly(true);
+        accessCookie.setPath("/");
+        accessCookie.setMaxAge(0);
+        accessCookie.setSecure(true);
+
+        Cookie refreshCookie = new Cookie("REFRESH_TOKEN", null);
+        refreshCookie.setHttpOnly(true);
+        refreshCookie.setPath("/");
+        refreshCookie.setMaxAge(0);
+        refreshCookie.setSecure(true);
+
+        response.addCookie(accessCookie);
+        response.addCookie(refreshCookie);
+
+        service.logout(request);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
 }

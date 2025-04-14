@@ -1,6 +1,7 @@
 package ru.lid.progertrainer.security.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -111,5 +112,31 @@ public class AuthenticationService {
                 new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
             }
         }
+    }
+
+    public void logout(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+
+        String accessToken = null;
+        String refreshToken = null;
+
+        for (Cookie cookie : cookies) {
+            if ("ACCESS_TOKEN".equals(cookie.getName())) {
+                accessToken = cookie.getValue();
+            }
+            if ("REFRESH_TOKEN".equals(cookie.getName())) {
+                refreshToken = cookie.getValue();
+            }
+        }
+
+        if (accessToken == null && refreshToken == null) {
+            return;
+        }
+
+        tokenRepository.findByToken(accessToken)
+                .ifPresent(tokenRepository::delete);
+
+        tokenRepository.findByToken(refreshToken)
+                .ifPresent(tokenRepository::delete);
     }
 }
