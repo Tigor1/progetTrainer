@@ -133,10 +133,12 @@ public class AuthenticationService {
             return;
         }
 
-        tokenRepository.findByToken(accessToken)
-                .ifPresent(tokenRepository::delete);
+        String email = jwtService.extractUsername(accessToken);
+        repository.findByEmail(email)
+                .ifPresent(this::deleteAllTokensByUser);
+    }
 
-        tokenRepository.findByToken(refreshToken)
-                .ifPresent(tokenRepository::delete);
+    private void deleteAllTokensByUser(User user) {
+        tokenRepository.deleteAllByUser(user);
     }
 }
